@@ -505,6 +505,14 @@
   };
 
   HTMLStack.prototype.strip = function (parent) {
+    // first recursive
+    for (var i = 0; i < this.stack.length; i++) {
+      var s = this.stack[i];
+      if (s instanceof HTMLTag && s.content) {
+        s.content.strip(s);
+      }
+    }
+
     var blanks = /^\s*$/;
     var new_stack = [];
     var new_len = 0,
@@ -524,6 +532,8 @@
           continue;
         } else if (HTMLTag.newlinetags.indexOf(s.name) >= 0) {
           afternewline = true;
+        /*} else if (s.name === 'span' && afternewline) {*/
+          // keep newline flag
         } else {
           afternewline = false;
         }
@@ -540,15 +550,13 @@
       new_len++;
       new_stack.push(s);
     }
-    this.stack = new_stack;
-    if (new_len > 0) {
-      for (var i = 0; i < this.stack.length; i++) {
-        var s = this.stack[i];
-        if (s instanceof HTMLTag && s.content) {
-          s.content.strip(s);
-        }
-      }
+
+    if (new_len <= 0 && parent) {
+      delete parent.content;
+      return;
     }
+
+    this.stack = new_stack;
     return this;
   };
 
@@ -588,7 +596,7 @@
     'center': { section: 'center' },
     'ul': { section: 'list' },
     'ol': { section: 'list' },
-    'li': { section: 'li' },
+    'li': { section: 'li', newline: 1 },
     'blockquote': { section: 'quote' },
     'code': { section: 'code' },
     'pre': { section: 'code' },
@@ -831,11 +839,21 @@
       }
       if (htag.name !== 'center') {
         var att = htag.attr.style['text-align'];
-        if (att === 'center') {
+        if (att === 'center' && !opts.noalign) {
           addbb(BBCode.maps['center']);
         }
       }
     }
+    if (sec.section === 'list' || sec.section === 'li') {
+      if (opts.nolist) {
+        return [];
+      }
+    } else if (sec.section === 'center') {
+      if (opts.noalign) {
+        return [];
+      }
+    }
+
     if ('extend' in sec) {
       for (var i = 0; i < sec.extend.length; i++) {
         var tag = sec.extend[i];
