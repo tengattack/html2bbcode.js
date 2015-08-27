@@ -11,7 +11,6 @@ if (process.argv.length <= 2) {
 
 var converter = new HTML2BBCode();
 
-
 fs.readFile(path.resolve(process.argv[2]), { encoding: 'utf8' }, function (err, data) {
   if (err) {
     console.error(err);

@@ -16,5 +16,8 @@
   },
   "licenses": "MIT",
   "engines": { "node" : ">= 0.8" },
-  "main": "html2bbcode.js"
+  "main": "html2bbcode.js",
+  "bin": {
+    "html2bbcode": "convert.js"
+  }
 }
