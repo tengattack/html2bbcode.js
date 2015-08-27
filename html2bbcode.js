@@ -689,11 +689,17 @@
     if (!c) return;
     var c1Regex = /rgba?\s*?\(\s*?(\d{1,3})\s*?,\s*?(\d{1,3})\s*?,\s*?(\d{1,3})\s*?.*?\)/i;
     if (c1Regex.test(c)) {
+      var pad2 = function (s) {
+        if (s.length < 2) {
+          s = '0' + s;
+        }
+        return s;
+      }
       c = c.replace(c1Regex, function (match, r, g, b) {
-        r = parseInt(r);
-        g = parseInt(g);
-        b = parseInt(b);
-        return '#' + r.toString(16) + g.toString(16) + b.toString(16);
+        r = pad2(parseInt(r).toString(16));
+        g = pad2(parseInt(g).toString(16));
+        b = pad2(parseInt(b).toString(16));
+        return '#' + r + g + b;
       });
     }
     return c;
