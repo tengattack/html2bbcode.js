@@ -1,0 +1,15 @@
+{
+  "name": "html2bbcode.js",
+  "version": "1.0.1",
+  "author": {
+    "name": "tengattack",
+    "url": "http://tengattack.com/"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/tengattack/html2bbcode.js/blob/master/LICENSE"
+    }
+  ],
+  "main": "./convert"
+}
