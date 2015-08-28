@@ -24,9 +24,11 @@
     "mocha": "*",
     "should": "*",
     "istanbul": "*",
+    "coveralls": "*",
     "uglify-js": "*"
   },
   "scripts": {
-    "test": "make test"
+    "test": "node ./node_modules/.bin/_mocha --reporter spec",
+    "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   }
 }
