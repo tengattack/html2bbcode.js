@@ -1,7 +1,7 @@
 {
   "name": "html2bbcode",
   "description": "Convert HTML to BBCode",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "homepage": "http://github.com/tengattack/html2bbcode.js",
   "keywords": [
     "html2bbcode", "bbcode", "html", "convert", "conversion"
@@ -14,10 +14,19 @@
     "type": "git",
     "url": "http://github.com/tengattack/html2bbcode.js.git"
   },
-  "licenses": "MIT",
+  "license": "MIT",
   "engines": { "node" : ">= 0.8" },
-  "main": "html2bbcode.js",
+  "main": "./lib/html2bbcode.js",
   "bin": {
     "html2bbcode": "convert.js"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "istanbul": "*",
+    "uglify-js": "*"
+  },
+  "scripts": {
+    "test": "mocha"
   }
 }

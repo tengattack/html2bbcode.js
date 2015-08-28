@@ -3,7 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 
-var HTML2BBCode = require('./html2bbcode').HTML2BBCode;
+var HTML2BBCode = require('./lib/html2bbcode').HTML2BBCode;
 
 if (process.argv.length <= 2) {
   console.error('ERR: Please provide a html file.');
