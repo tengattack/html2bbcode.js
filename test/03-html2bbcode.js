@@ -64,6 +64,10 @@ describe(namespace + "feed", function () {
       var h2b = new HTML2BBCode();
       (h2b.feed('<p>\n\t str</p>\n').toString()).should.eql('str\n');
     });
+    it("feed('<span>J</span><h3></h3><span>K</span>\\n') should be 'J\\nK'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<span>J</span><h3></h3><span>K</span>\n').toString()).should.eql('J\nK');
+    });
   });
   describe(namespace + "feed/font", function () {
     it("feed('<p>str<font size=\"16px\">16px</font><i>TEST</i></p>')\n"
@@ -154,13 +158,13 @@ describe(namespace + "feed", function () {
     });
   });
   describe(namespace + "feed/list", function () {
-    it("feed('<ul><li>one</li><li>two</li></ul>') should be '[ul]\\n[li]one[/li]\\n[li]two[/li]\\n[/ul]'", function () {
+    it("feed('<ul><li>one</li><li>two</li></ul>afterlist') should be '[ul][li]one[/li]\\n[li]two[/li]\\n[/ul]afterlist'", function () {
       var h2b = new HTML2BBCode();
-      (h2b.feed('<ul><li>one</li><li>two</li></ul>').toString()).should.eql('[ul]\n[li]one[/li]\n[li]two[/li]\n[/ul]');
+      (h2b.feed('<ul><li>one</li><li>two</li></ul>afterlist').toString()).should.eql('[ul][li]one[/li]\n[li]two[/li]\n[/ul]afterlist');
     });
-    it("feed('<ol><li>one</li></ol>') should be '[ol]\\n[li]one[/li]\\n[/ol]'", function () {
+    it("feed('<ol><li>one</li></ol>') should be '[ol][li]one[/li]\\n[/ol]'", function () {
       var h2b = new HTML2BBCode();
-      (h2b.feed('<ol><li>one</li></ol>').toString()).should.eql('[ol]\n[li]one[/li]\n[/ol]');
+      (h2b.feed('<ol><li>one</li></ol>').toString()).should.eql('[ol][li]one[/li]\n[/ol]');
     });
     it("nolist, feed('<ul><li>one</li><li>two</li></ul>') should be 'one\\ntwo\\n'", function () {
       var h2b = new HTML2BBCode({ nolist: true });

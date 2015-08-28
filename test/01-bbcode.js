@@ -17,4 +17,13 @@ describe(namespace + "base", function () {
     bbcode.close('b');
     bbcode.toString().should.eql("[b]str[/b]");
   });
+  it("open/rollback/open/close should be enclosed once", function () {
+    var bbcode = new BBCode();
+    bbcode.open('b');
+    bbcode.rollback();
+    bbcode.open('i');
+    bbcode.append('str');
+    bbcode.close('i');
+    bbcode.toString().should.eql("[i]str[/i]");
+  });
 });
