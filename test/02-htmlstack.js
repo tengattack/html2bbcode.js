@@ -57,6 +57,21 @@ describe(namespace + "parse", function () {
     should.exist(tag.content.stack);
     (tag.content.stack).should.eql([ 'str' ]);
   });
+  it("parse('<img src=\"http://example.com/1.jpg\">').stack\n"
+      + "\tshould be `<img> ~> { src: \"http://example.com/1.jpg\" }`", function () {
+    var hs = new HTMLStack();
+    var s = hs.parse('<img src=\"http://example.com/1.jpg\">').stack;
+
+    (s.length).should.eql(1);
+    (s[0].constructor.name).should.eql('HTMLTag');
+
+    var tag = s[0];
+    (tag.name).should.eql('img');
+    should.not.exist(tag.content);
+    should.exist(tag.attr);
+
+    tag.attr.should.eql({ "src": "http://example.com/1.jpg" });
+  });
   it("parse('&amp;str').decode().stack should be [ '&str' ]", function () {
     var hs = new HTMLStack();
     hs.parse('&amp;str').decode();

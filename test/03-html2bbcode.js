@@ -55,4 +55,130 @@ describe(namespace + "base", function () {
 });
 
 describe(namespace + "feed", function () {
+  describe(namespace + "feed/normal", function () {
+    it("feed('str') should be 'str'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('str').toString()).should.eql('str');
+    });
+    it("feed('<p>\\n\\t str</p>\\n') should be 'str\\n'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<p>\n\t str</p>\n').toString()).should.eql('str\n');
+    });
+  });
+  describe(namespace + "feed/font", function () {
+    it("feed('<p>str<font size=\"16px\">16px</font><i>TEST</i></p>')\n"
+        + "\t  should be 'str[size=16]16px[/size][i]TEST[/i]\\n'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<p>str<font size=\"16px\">16px</font><i>TEST</i></p>').toString())
+        .should.eql('str[size=16]16px[/size][i]TEST[/i]\n');
+    });
+    it("feed('<size size=\"12\">str</size>')\n"
+        + "\t  should be '[size=12]str[/size]'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<size size=\"12\">str</size>').toString()).should.eql('[size=12]str[/size]');
+    });
+    it("feed('<span>str\\n\\t<font size=\"16px\" color=\"#aaa\">a space here -&gt;&nbsp;</font><del><strong>TEST</strong></del></span>')\n"
+        + "\t  should be 'str [size=16][color=#aaa]16px[/color][/size][s][b]TEST[/b][/s]'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<span>str\n\t<font face=\"Arial\" color=\"#aaa\">a space here -&gt;&nbsp;</font><del><strong>TEST</strong></del></span>').toString())
+        .should.eql('str [color=#aaa][font=Arial]a space here -> [/font][/color][s][b]TEST[/b][/s]');
+    });
+    it("feed('<span style=\"font-size:15px;font-weight:bold;font-face:Arial;color:red\">str</span>')\n"
+        + "\t  should be '[b][color=red][size=15]str[/size][/color][/b]'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<span style=\"font-size:15px;font-weight:bold;font-face:Arial;color:red\">str</span>').toString())
+        .should.eql('[b][color=red][size=15]str[/size][/color][/b]');
+    });
+    it("transsize, feed('<span style=\"font-size:16px;\">str</span>')\n"
+      + "\t  should be '[size=3]str[/size]", function () {
+      var h2b = new HTML2BBCode({ transsize: true });
+      (h2b.feed('<span style=\"font-size:16px;\">str</span>').toString()).should.eql('[size=3]str[/size]');
+    });
+    it("transsize, feed('<font size=\"6\">str</font>')\n"
+      + "\t  should be '[size=6]str[/size]", function () {
+      var h2b = new HTML2BBCode({ transsize: true });
+      (h2b.feed('<font size=\"6\">str</font>').toString()).should.eql('[size=6]str[/size]');
+    });
+  });
+  describe(namespace + "feed/img", function () {
+    it("feed('<img src=\"http://example.com/1.jpg\"/>')\n"
+      + "\t  should be '[img]http://example.com/1.jpg[/img]", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<img src=\"http://example.com/1.jpg\"/>').toString()).should.eql('[img]http://example.com/1.jpg[/img]');
+    });
+    it("feed('<img width=\"120\" style=\"height:80px\" src=\"http://example.com/1.jpg\"/>')\n"
+      + "\t  should be '[img]http://example.com/1.jpg[/img]", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<img width=\"120\" style=\"height:80px\" src=\"http://example.com/1.jpg\"/>').toString()).should.eql('[img]http://example.com/1.jpg[/img]');
+    });
+    it("imagescale, feed('<img width=100 height=50 src=\"http://example.com/1.jpg\"/>')\n"
+      + "\t  should be '[img=100x50]http://example.com/1.jpg[/img]", function () {
+      var h2b = new HTML2BBCode({ imagescale: true });
+      (h2b.feed('<img width=100 height=50 src=\"http://example.com/1.jpg\"/>').toString()).should.eql('[img=100x50]http://example.com/1.jpg[/img]');
+    });
+    it("imagescale, feed('<img width=\"100px\" src=\"http://example.com/1.jpg\"/>')\n"
+      + "\t  should be '[img width=100]http://example.com/1.jpg[/img]", function () {
+      var h2b = new HTML2BBCode({ imagescale: true });
+      (h2b.feed('<img width=\"100px\" src=\"http://example.com/1.jpg\"/>').toString()).should.eql('[img width=100]http://example.com/1.jpg[/img]');
+    });
+    it("imagescale, feed('<img height=50 src=\"http://example.com/1.jpg\"/>')\n"
+      + "\t  should be '[img height=50]http://example.com/1.jpg[/img]", function () {
+      var h2b = new HTML2BBCode({ imagescale: true });
+      (h2b.feed('<img height=50 src=\"http://example.com/1.jpg\"/>').toString()).should.eql('[img height=50]http://example.com/1.jpg[/img]');
+    });
+    it("imagescale, feed('<img width=\"100px\" style=\"width:120px\" src=\"http://example.com/1.jpg\"/>')\n"
+      + "\t  should be '[img width=120]http://example.com/1.jpg[/img]", function () {
+      var h2b = new HTML2BBCode({ imagescale: true });
+      (h2b.feed('<img width=\"100px\" style=\"width:120px\" src=\"http://example.com/1.jpg\"/>').toString()).should.eql('[img width=120]http://example.com/1.jpg[/img]');
+    });
+    it("imagescale, feed('<img height=50 style=\"height:80px\" src=\"http://example.com/1.jpg\"/>')\n"
+      + "\t  should be '[img height=80]http://example.com/1.jpg[/img]", function () {
+      var h2b = new HTML2BBCode({ imagescale: true });
+      (h2b.feed('<img height=50 style=\"height:80px\" src=\"http://example.com/1.jpg\"/>').toString()).should.eql('[img height=80]http://example.com/1.jpg[/img]');
+    });
+  });
+  describe(namespace + "feed/align", function () {
+    it("feed('<center>str</center>')\n"
+        + "\tor feed('<span style=\"text-align:center\">str</span>')\n"
+        + "\t  should be '[center]str[/center]'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<center>str</center>').toString()).should.eql('[center]str[/center]');
+      (h2b.feed('<span style=\"text-align:center\">str</span>').toString()).should.eql('[center]str[/center]');
+    });
+    it("noalign, feed('<center>str</center>')\n"
+        + "\tor feed('<span style=\"text-align:center\">str</span>')\n"
+        + "\t  should be 'str'", function () {
+      var h2b = new HTML2BBCode({ noalign: true });
+      (h2b.feed('<center>str</center>').toString()).should.eql('str');
+      (h2b.feed('<span style=\"text-align:center\">str</span>').toString()).should.eql('str');
+    });
+  });
+  describe(namespace + "feed/list", function () {
+    it("feed('<ul><li>one</li><li>two</li></ul>') should be '[ul]\\n[li]one[/li]\\n[li]two[/li]\\n[/ul]'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<ul><li>one</li><li>two</li></ul>').toString()).should.eql('[ul]\n[li]one[/li]\n[li]two[/li]\n[/ul]');
+    });
+    it("feed('<ol><li>one</li></ol>') should be '[ol]\\n[li]one[/li]\\n[/ol]'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<ol><li>one</li></ol>').toString()).should.eql('[ol]\n[li]one[/li]\n[/ol]');
+    });
+    it("nolist, feed('<ul><li>one</li><li>two</li></ul>') should be 'one\\ntwo\\n'", function () {
+      var h2b = new HTML2BBCode({ nolist: true });
+      (h2b.feed('<ul><li>one</li><li>two</li></ul>').toString()).should.eql('one\ntwo\n');
+    });
+  });
+  describe(namespace + "feed/headings", function () {
+    it("feed('<h1>TITLE</h1>') should be '[h1]TITLE[/h1]\\n'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<h1>TITLE</h1>').toString()).should.eql('[h1]TITLE[/h1]\n');
+    });
+    it("noheadings, feed('<h1>TITLE</h1>') should be '[size=32]TITLE[/size]\\n'", function () {
+      var h2b = new HTML2BBCode({ noheadings: true });
+      (h2b.feed('<h1>TITLE</h1>').toString()).should.eql('[size=32]TITLE[/size]\n');
+    });
+    it("noheadings, transsize, feed('<h1>TITLE</h1>') should be '[size=6]TITLE[/size]\\n'", function () {
+      var h2b = new HTML2BBCode({ noheadings: true, transsize: true });
+      (h2b.feed('<h1>TITLE</h1>').toString()).should.eql('[size=6]TITLE[/size]\n');
+    });
+  });
 });
