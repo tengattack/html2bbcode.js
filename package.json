@@ -27,6 +27,6 @@
     "uglify-js": "*"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "make test"
   }
 }
