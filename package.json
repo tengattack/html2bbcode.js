@@ -1,7 +1,7 @@
 {
   "name": "html2bbcode",
   "description": "Convert HTML to BBCode",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "homepage": "http://github.com/tengattack/html2bbcode.js",
   "keywords": [
     "html2bbcode", "bbcode", "html", "convert", "conversion"

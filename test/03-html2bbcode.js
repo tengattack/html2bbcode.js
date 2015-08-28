@@ -64,6 +64,10 @@ describe(namespace + "feed", function () {
       var h2b = new HTML2BBCode();
       (h2b.feed('<p>\n\t str</p>\n').toString()).should.eql('str\n');
     });
+    it("feed('<span style=\"color:rgb(128, 0, 128);\"><br>\n  </span>') should be '[color=#800080]\\n[/color]'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<span style=\"color:rgb(128, 0, 128);\"><br>\n  </span>').toString()).should.eql('[color=#800080]\n[/color]');
+    });
     it("feed('<span>J</span><h3></h3><span>K</span>\\n') should be 'J\\nK'", function () {
       var h2b = new HTML2BBCode();
       (h2b.feed('<span>J</span><h3></h3><span>K</span>\n').toString()).should.eql('J\nK');

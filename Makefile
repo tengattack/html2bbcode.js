@@ -21,7 +21,7 @@ coverage: dependencies
 min: dependencies
 	@$(NPM)/uglifyjs --compress --mangle --comments '/Copyright/' $(SRC) > html2bbcode.min.js
 
-publish: min
+publish:
 	@npm run coveralls
 	@npm publish
 
