@@ -5,14 +5,33 @@ var path = require('path');
 
 var HTML2BBCode = require('./lib/html2bbcode').HTML2BBCode;
 
+function printUsage() {
+  console.log('Usage:\n'
+    + '  html2bbcode [opts] [html_file]');
+}
+
 if (process.argv.length <= 2) {
   console.error('ERR: Please provide a html file.');
+  printUsage();
   process.exit(1);
 }
 
-var converter = new HTML2BBCode();
+var filepath;
+var opts = {};
+for (var i = 2; i < process.argv.length; i++) {
+  var p = process.argv[i];
+  if (p) {
+    if (/^--.+?$/.test(p)) {
+      opts[p.substr(2)] = true;
+    } else {
+      filepath = path.resolve(p);
+    }
+  }
+}
 
-fs.readFile(path.resolve(process.argv[2]), { encoding: 'utf8' }, function (err, data) {
+var converter = new HTML2BBCode(opts);
+
+fs.readFile(filepath, { encoding: 'utf8' }, function (err, data) {
   if (err) {
     console.error(err);
     process.exit(1);

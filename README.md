@@ -18,6 +18,11 @@ var bbcode = converter.feed(data);
 console.log(bbcode.toString());
 ```
 
+```bash
+$ npm install -g html2bbcode
+$ html2bbcode --imagescale test.html
+```
+
 ## Options
 
 ```javascript
@@ -29,7 +34,9 @@ new HTML2BBCode({
   // disable list <ul> <ol> <li> support, default: false
   nolist: true,
   // disable text-align center support, default: false
-  noalign: true
+  noalign: true,
+  // disable HTML headings support, transform to size, default: false
+  noheadings: true
 });
 ```
 
