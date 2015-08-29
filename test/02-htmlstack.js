@@ -84,6 +84,21 @@ describe(namespace + "parse", function () {
     should.exist(hs.stack);
     (hs.stack).should.eql([ '&str' ]);
   });
+  it("parse('<script> 1 > 2; 1 < 2; \\'</script><span>TEST</span>\\'; </script>str')\n"
+      + "\tshould be [ `<script> -> [ script ]`, 'str' ]", function () {
+    var hs = new HTMLStack();
+    var s = hs.parse("<script> 1 > 2; 1 < 2; \'</script><span>TEST</span>\'; </script>str").stack;
+
+    (s.length).should.eql(2);
+    (s[0].constructor.name).should.eql('HTMLTag');
+    (s[1]).should.eql('str');
+
+    var tag = s[0];
+    (tag.name).should.eql('script');
+    should.exist(tag.content);
+
+    tag.content.stack.should.eql([ ' 1 > 2; 1 < 2; \'</script><span>TEST</span>\'; ' ]);
+  });
 });
 
 describe(namespace + "strip", function () {
@@ -190,5 +205,31 @@ describe(namespace + "fault-tolerant", function () {
     (tag.name).should.eql('p');
     should.exist(tag.content);
     (tag.content.stack).should.eql([ 'str' ]);
+  });
+
+  it("parse('<p>str').stack should be `<p> -> [ 'str' ]`", function () {
+    var hs = new HTMLStack();
+    var s = hs.parse('<p>str').stack;
+
+    (s.length).should.eql(1);
+    (s[0].constructor.name).should.eql('HTMLTag');
+
+    var tag = s[0];
+    (tag.name).should.eql('p');
+    should.exist(tag.content);
+    (tag.content.stack).should.eql([ 'str' ]);
+  });
+
+  it("parse('<script> 1 > 2; 1 < 2; \\'</script> str')\n"
+      + "\tshould be `<script> -> null`", function () {
+    var hs = new HTMLStack();
+    var s = hs.parse("<script> 1 > 2; 1 < 2; \\'</script> str").stack;
+
+    (s.length).should.eql(1);
+    (s[0].constructor.name).should.eql('HTMLTag');
+
+    var tag = s[0];
+    (tag.name).should.eql('script');
+    should.not.exist(tag.content);
   });
 });
