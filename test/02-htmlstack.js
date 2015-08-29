@@ -24,6 +24,12 @@ describe(namespace + "base", function () {
     var hs = new HTMLStack();
     hs.decode().should.eql(hs);  //eql self
   });
+  it("dedup() should return HTMLStack", function () {
+    var hs = new HTMLStack();
+    (hs.dedup().constructor.name).should.eql('HTMLStack');
+    var hs = new HTMLStack();
+    hs.dedup().should.eql(hs);  //eql self
+  });
   it("HTMLStack.unescape('str&nbsp;', true) should be '&nbsp;'", function () {
     HTMLStack.unescape('str&nbsp;', true).should.eql('str&nbsp;');
   });
@@ -122,6 +128,38 @@ describe(namespace + "strip", function () {
     (tag2.name).should.eql('span');
     should.exist(tag2.content);
     (tag2.content.stack).should.eql([ ' str' ]);
+  });
+});
+
+describe(namespace + "dedup", function () {
+  it("parse('<div>\\n\\t<div> </div></div>').strip().dedup().stack should be `<div>`", function () {
+    var hs = new HTMLStack();
+    var s = hs.parse('<div>\n\t<div> </div></div>').strip().dedup().stack;
+
+    (s.length).should.eql(1);
+    (s[0].constructor.name).should.eql('HTMLTag');
+
+    var tag = s[0];
+    (tag.name).should.eql('div');
+    should.not.exist(tag.content);
+  });
+
+  it("parse('<div>\\n\\t<span> </span></div>').strip().dedup().stack\n"
+      + "\tshould be `<div> -> [ `<span>` ]`", function () {
+    var hs = new HTMLStack();
+    var s = hs.parse('<div>\n\t<span>&nbsp;</span></div>').strip().stack;
+
+    (s.length).should.eql(1);
+    (s[0].constructor.name).should.eql('HTMLTag');
+
+    var tag = s[0];
+    (tag.name).should.eql('div');
+    should.exist(tag.content);
+
+    var s2 = tag.content.stack;
+    (s2.length).should.eql(1);
+    (s2[0].constructor.name).should.eql('HTMLTag');
+    (s2[0].name).should.eql('span');
   });
 });
 

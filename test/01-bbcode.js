@@ -10,10 +10,16 @@ describe(namespace + "base", function () {
     bbcode.append('str');
     bbcode.toString().should.eql("str");
   });
-  it("newline() should be a new line", function () {
+  it("first newline() should be ''", function () {
     var bbcode = new BBCode();
     bbcode.newline();
-    bbcode.toString().should.eql("\n");
+    bbcode.toString().should.eql("");
+  });
+  it("next newline() should be with a new line", function () {
+    var bbcode = new BBCode();
+    bbcode.append('str');
+    bbcode.newline();
+    bbcode.toString().should.eql("str\n");
   });
   it("open/close should be enclosed", function () {
     var bbcode = new BBCode();

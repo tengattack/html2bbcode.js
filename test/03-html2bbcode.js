@@ -77,6 +77,10 @@ describe(namespace + "feed", function () {
       var h2b = new HTML2BBCode();
       (h2b.feed('<span>J</span><h3></h3><span>K</span>\n').toString()).should.eql('J\nK');
     });
+    it("feed('<tr><td><div>\\n\\t<div>\\n\\t\\t<div>\\n<p>str</p></div></div></div></td></tr>') should be 'str\\n'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<tr><td><div>\n\t<div>\n\t\t<div>\n<p>  str</p></div></div></div></td></tr>').toString()).should.eql('str\n');
+    });
   });
   describe(namespace + "feed/font", function () {
     it("feed('<p>str<font size=\"16px\">16px</font><i>TEST</i></p>')\n"
@@ -184,6 +188,10 @@ describe(namespace + "feed", function () {
     it("feed('<h1>TITLE</h1>') should be '[h1]TITLE[/h1]\\n'", function () {
       var h2b = new HTML2BBCode();
       (h2b.feed('<h1>TITLE</h1>').toString()).should.eql('[h1]TITLE[/h1]\n');
+    });
+    it("feed('<div>\\n\\t<h1>TITLE</h1>\\n</div>') should be '[h1]TITLE[/h1]\\n'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<div>\n\t<h1>TITLE</h1>\n</div>').toString()).should.eql('[h1]TITLE[/h1]\n');
     });
     it("noheadings, feed('<h1>TITLE</h1>') should be '[size=32]TITLE[/size]\\n'", function () {
       var h2b = new HTML2BBCode({ noheadings: true });
