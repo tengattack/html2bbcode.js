@@ -64,6 +64,11 @@ describe(namespace + "feed", function () {
       var h2b = new HTML2BBCode();
       (h2b.feed('<p>\n\t str</p>\n').toString()).should.eql('str\n');
     });
+    it("feed('<span>str \\n\\t </span>') should be 'str'", function () {
+      // remove ending blanks
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<span>str \n\t </span>').toString()).should.eql('str');
+    });
     it("feed('<span style=\"color:rgb(128, 0, 128);\"><br>\n  </span>') should be '[color=#800080]\\n[/color]'", function () {
       var h2b = new HTML2BBCode();
       (h2b.feed('<span style=\"color:rgb(128, 0, 128);\"><br>\n  </span>').toString()).should.eql('[color=#800080]\n[/color]');
