@@ -105,10 +105,16 @@ describe(namespace + "feed", function () {
       (h2b.feed('<span>str\n\t<font face=\"Arial\" color=\"#aaa\">a space here -&gt;&nbsp;</font><del><strong>TEST</strong></del></span>').toString())
         .should.eql('str [color=#aaa][font=Arial]a space here -> [/font][/color][s][b]TEST[/b][/s]');
     });
-    it("feed('<span style=\"font-size:15px;font-weight:bold;font-face:Arial;color:red\">str</span>')\n"
+    it("feed('<span style=\"font-style:italic;font-family:Arial;\">str</span>')\n"
+        + "\t  should be '[font=Arial][i]str[/i][/font]'", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<span style=\"font-style:italic;font-family:Arial;\">str</span>').toString())
+        .should.eql('[i][font=Arial]str[/font][/i]');
+    });
+    it("feed('<span style=\"font-size:15px;font-weight:bold;color:red\">str</span>')\n"
         + "\t  should be '[b][color=red][size=15]str[/size][/color][/b]'", function () {
       var h2b = new HTML2BBCode();
-      (h2b.feed('<span style=\"font-size:15px;font-weight:bold;font-face:Arial;color:red\">str</span>').toString())
+      (h2b.feed('<span style=\"font-size:15px;font-weight:bold;color:red\">str</span>').toString())
         .should.eql('[b][color=red][size=15]str[/size][/color][/b]');
     });
     it("transsize, feed('<span style=\"font-size:16px;\">str</span>')\n"
