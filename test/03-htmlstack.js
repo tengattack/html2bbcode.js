@@ -30,6 +30,10 @@ describe(namespace + "base", function () {
     var hs = new HTMLStack();
     hs.dedup().should.eql(hs);  //eql self
   });
+  it("HTMLStack.minify('<div><div>\\n\\t<span>\\n\\tstr</span>\\n </div>\\n</div>')\n"
+      + "\tshould be '<div><span> str</span></div>'", function () {
+    HTMLStack.minify('<div><div>\n\t<span>\n\tstr</span>\n </div>\n</div>').should.eql('<div><span> str</span></div>');
+  });
   it("HTMLStack.unescape('str&nbsp;', true) should be '&nbsp;'", function () {
     HTMLStack.unescape('str&nbsp;', true).should.eql('str&nbsp;');
   });

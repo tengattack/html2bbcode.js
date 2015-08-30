@@ -134,6 +134,10 @@ describe(namespace + "feed", function () {
       var h2b = new HTML2BBCode();
       (h2b.feed('<img src=\"http://example.com/1.jpg\"/>').toString()).should.eql('[img]http://example.com/1.jpg[/img]');
     });
+    it("feed('<img src=\"\"/>') should be ''", function () {
+      var h2b = new HTML2BBCode();
+      (h2b.feed('<img src=\"\"/>').toString()).should.eql('');
+    });
     it("feed('<img width=\"120\" style=\"height:80px\" src=\"http://example.com/1.jpg\"/>')\n"
       + "\t  should be '[img]http://example.com/1.jpg[/img]", function () {
       var h2b = new HTML2BBCode();
