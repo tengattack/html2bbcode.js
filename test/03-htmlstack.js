@@ -34,6 +34,11 @@ describe(namespace + "base", function () {
       + "\tshould be '<div><span> str</span></div>'", function () {
     HTMLStack.minify('<div><div>\n\t<span>\n\tstr</span>\n </div>\n</div>').should.eql('<div><span> str</span></div>');
   });
+  it("HTMLStack.minify('<div>   </div><pre>\\n\\tcode here\\n\\tline2  \\n</pre>\\n\\t<pre>\\t\\nline1\\t</pre>')\n"
+      + "\tshould be '<div></div><pre>\\n\\tcode here\\n\\tline2  \\n</pre> <pre>\\t\\nline1\\t</pre>'", function () {
+    HTMLStack.minify('<div>   </div><pre>\n\tcode here\n\tline2  \n</pre>\n\t<pre>\t\nline1\t</pre>')
+      .should.eql('<div></div><pre>\n\tcode here\n\tline2  \n</pre> <pre>\t\nline1\t</pre>');
+  });
   it("HTMLStack.unescape('str&nbsp;', true) should be '&nbsp;'", function () {
     HTMLStack.unescape('str&nbsp;', true).should.eql('str&nbsp;');
   });
